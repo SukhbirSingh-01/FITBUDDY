@@ -1,11 +1,8 @@
 from google import genai
 import os
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-pro")
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY"))
 
-
-# Function to generate workout
 def generate_workout_gemini(user_input: dict) -> str:
     prompt = f"""
 You are a professional fitness trainer.
@@ -25,7 +22,10 @@ Cooldown: ...
 (Repeat for Day 2-7)
 """
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-1.5-pro",
+            contents=prompt
+        )
         return response.text
     except Exception as e:
         return f"Error: {e}"
