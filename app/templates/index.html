@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FitBuddy - AI Workout Generator</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(0,0,0,0.65), rgba(0,0,0,0.55)),
+                        url('/static/images/gym-bg.jpg') center/cover no-repeat fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.97);
+            border-radius: 16px;
+            padding: 40px 36px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-header .emoji { font-size: 2.2rem; }
+
+        .card-header h1 {
+            font-size: 1.5rem;
+            color: #1a1a2e;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .card-header p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 6px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #333;
+            transition: border-color 0.2s;
+            outline: none;
+            background: #fafafa;
+        }
+
+        input:focus, select:focus {
+            border-color: #4361ee;
+            background: #fff;
+        }
+
+        input::placeholder { color: #aaa; font-size: 0.88rem; }
+
+        .row { display: flex; gap: 14px; }
+        .row .form-group { flex: 1; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: opacity 0.2s, transform 0.1s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-submit:hover { opacity: 0.92; transform: translateY(-1px); }
+        .btn-submit:active { transform: translateY(0); }
+
+        .loading { display: none; text-align: center; color: #4361ee; font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <div class="emoji">💪</div>
+            <h1>FitBuddy - AI Workout Generator</h1>
+            <p>Enter your details to get a personalized 7-day fitness plan</p>
+        </div>
+
+        <form method="POST" action="/generate-workout" onsubmit="showLoading()">
+            <div class="form-group">
+                <label for="username">Name:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your name" required />
+            </div>
+
+            <div class="form-group">
+                <label for="user_id">User ID:</label>
+                <input type="number" id="user_id" name="user_id" placeholder="Enter a unique numeric ID" required />
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" placeholder="e.g. 25" required />
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (kg):</label>
+                    <input type="number" step="0.1" id="weight" name="weight" placeholder="e.g. 70" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="goal">Fitness Goal:</label>
+                <input type="text" id="goal" name="goal" placeholder="e.g., weight loss, flexibility" required />
+            </div>
+
+            <div class="form-group">
+                <label for="intensity">Workout Intensity:</label>
+                <select id="intensity" name="intensity">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Generate Plan</button>
+            <div class="loading" id="loadingMsg">⏳ Generating your personalized plan...</div>
+        </form>
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loadingMsg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

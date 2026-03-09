@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Your Personalized Workout Plan</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.5)),
+                        url('/static/images/gym-bg.jpg') center/cover no-repeat fixed;
+            padding: 40px 20px;
+            color: #1a1a2e;
+        }
+
+        .container { max-width: 860px; margin: 0 auto; }
+
+        .page-title {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 { font-size: 2rem; font-weight: 800; }
+        .page-title .emoji { font-size: 2.4rem; }
+
+        .card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 14px;
+            padding: 30px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+        }
+
+        .card h2 {
+            font-size: 1.2rem;
+            color: #4361ee;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #eef0ff;
+            padding-bottom: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 24px;
+        }
+
+        .info-item { display: flex; gap: 8px; font-size: 0.95rem; }
+        .info-item strong { color: #333; min-width: 80px; }
+        .info-item span { color: #555; }
+
+        .workout-pre {
+            background: #f8f9ff;
+            border: 1px solid #e0e4ff;
+            border-radius: 10px;
+            padding: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: #333;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .nutrition-box {
+            background: linear-gradient(135deg, #fff9e6, #fff3cc);
+            border: 1px solid #ffd966;
+            border-radius: 10px;
+            padding: 18px 22px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .nutrition-box .nt-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #b8860b;
+            margin-bottom: 10px;
+        }
+
+        .updated-banner {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 1px solid #28a745;
+            border-radius: 10px;
+            padding: 14px 20px;
+            color: #155724;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .feedback-form label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .feedback-form input[type="number"],
+        .feedback-form textarea {
+            width: 100%;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.93rem;
+            margin-bottom: 14px;
+            outline: none;
+            font-family: inherit;
+            background: #fafafa;
+            transition: border-color 0.2s;
+        }
+
+        .feedback-form input:focus,
+        .feedback-form textarea:focus { border-color: #4361ee; background: #fff; }
+
+        .feedback-form textarea { height: 100px; resize: vertical; }
+
+        .btn {
+            padding: 11px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary { background: linear-gradient(135deg, #4361ee, #3a0ca3); color: white; width: 100%; }
+        .btn-secondary { background: #6c757d; color: white; text-decoration: none; display: inline-block; margin-top: 10px; }
+        .btn:hover { opacity: 0.88; }
+
+        .nav-links { text-align: center; margin-top: 10px; }
+        .nav-links a { color: #fff; text-decoration: none; font-size: 0.9rem; margin: 0 10px; opacity: 0.85; }
+        .nav-links a:hover { opacity: 1; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-title">
+            <div class="emoji">🏋️</div>
+            <h1>Your Personalized Workout Plan</h1>
+        </div>
+
+        {% if feedback_updated %}
+        <div class="updated-banner">
+            ✅ Your plan has been updated based on your feedback!
+        </div>
+        {% endif %}
+
+        <!-- User Info -->
+        <div class="card">
+            <h2>User Information</h2>
+            <div class="info-grid">
+                <div class="info-item"><strong>Name:</strong><span>{{ username }}</span></div>
+                <div class="info-item"><strong>User ID:</strong><span>{{ user_id }}</span></div>
+                <div class="info-item"><strong>Age:</strong><span>{{ age }}</span></div>
+                <div class="info-item"><strong>Weight:</strong><span>{{ weight }} kg</span></div>
+                <div class="info-item"><strong>Goal:</strong><span>{{ goal }}</span></div>
+                <div class="info-item"><strong>Intensity:</strong><span>{{ intensity | capitalize }}</span></div>
+            </div>
+        </div>
+
+        <!-- Workout Plan -->
+        <div class="card">
+            <h2>Workout Plan</h2>
+            <pre class="workout-pre">{{ workout_plan }}</pre>
+        </div>
+
+        <!-- Nutrition Tip -->
+        <div class="card">
+            <h2>💡 Nutrition Tip</h2>
+            <div class="nutrition-box">
+                <div class="nt-title">💡 Nutrition Tip</div>
+                {{ nutrition_tip }}
+            </div>
+        </div>
+
+        <!-- Feedback Form -->
+        <div class="card">
+            <h2>📝 Share Your Feedback</h2>
+            <form method="POST" action="/submit-feedback" class="feedback-form">
+                <label>Your Unique User ID:</label>
+                <input type="number" name="user_id" value="{{ user_id }}" placeholder="Enter the same User ID used to generate your plan" required />
+                <label>Your Feedback:</label>
+                <textarea name="feedback" placeholder="Let us know how we can improve your plan..."></textarea>
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </form>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">← Generate New Plan</a>
+            <a href="/view-all-users">View All Users →</a>
+        </div>
+    </div>
+</body>
+</html>
